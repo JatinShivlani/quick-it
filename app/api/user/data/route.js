@@ -12,8 +12,10 @@ export async function GET(request) {
     //getting the user id from getauth function of clerk
     //this will return the user id of the logged in user
     const { userId } = getAuth(request);
+
     // connecting to the database
     await connectDB();
+
     //finding the user by id in the database
     const user = await User.findById(userId);
 
