@@ -9,7 +9,6 @@ if(!cached){
 
 async function connectDB() {
 if (cached.conn) {
-  console.log("Using cached database connection",cached.conn);
     return cached.conn;
   } 
   if(!cached.promise){
@@ -17,12 +16,10 @@ if (cached.conn) {
         bufferCommands: false,
     };
     cached.promise = mongoose.connect(`${process.env.MONGODB_URI}/quickit`, opts).then((mongoose) => {
-      console.log("New database connection established",mongoose);
         return mongoose;
     });
   }
   cached.conn = await cached.promise;
-  console.log("Database connection established",cached.conn);
   return cached.conn;
 }
 
