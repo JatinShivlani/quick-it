@@ -14,7 +14,7 @@ const AddProduct = () => {
   const [category, setCategory] = useState("Earphone");
   const [price, setPrice] = useState("");
   const [offerPrice, setOfferPrice] = useState("");
-
+  const [loading, setLoading] = useState(false);
   const handleSubmit = async (e) => {
     e.preventDefault();
     const formData = new FormData();
@@ -29,12 +29,13 @@ const AddProduct = () => {
     }
     try {
       const token = await getToken();
+      setLoading(true);
       const { data } = await axios.post("/api/product/add", formData, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
       });
-
+      setLoading(false);
       if (data.success) {
         toast.success("Product added successfully");
         setFiles([]);
@@ -157,9 +158,12 @@ const AddProduct = () => {
             />
           </div>
         </div>
-        <button type="submit" className="px-8 py-2.5 bg-orange-600 text-white font-medium rounded">
+        {loading ? <> <button disabled type="submit" className="px-8 cursor-not-allowed py-2.5 bg-gray-600 text-white font-medium rounded">
+          Adding ...
+        </button></> : <> <button type="submit" className="px-8 py-2.5 bg-orange-600 text-white font-medium rounded">
           ADD
-        </button>
+        </button></>}
+
       </form>
       {/* <Footer /> */}
     </div>
