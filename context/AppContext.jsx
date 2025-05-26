@@ -21,13 +21,24 @@ export const AppContextProvider = (props) => {
   const [userData, setUserData] = useState(false);
   const [isSeller, setIsSeller] = useState(false);
   const [cartItems, setCartItems] = useState({});
-
+  const [loading, setLoading] = useState(true);
   const fetchProductData = async () => {
-    setProducts(productsDummyData);
+    try {
+      setLoading(true);
+      const { data } = await axios.get("/api/product/list");
+      if (data.success) {
+        setLoading(false);
+        setProducts(data.products);
+      } else {
+        toast.error(data.message);
+      }
+    } catch (error) {
+      toast.error(error.message);
+    }
   };
 
 
-//used to fetch the user data from the database
+  //used to fetch the user data from the database
   const fetchUserData = async () => {
     try {
       if (user.publicMetadata.role === "seller") {
@@ -45,16 +56,16 @@ export const AppContextProvider = (props) => {
         setUserData(data.user);
         setCartItems(data.user.cartItems);
       }
-      else{
+      else {
         toast.error(data.message);
       }
     } catch (error) {
-     toast.error(error.message);
+      toast.error(error.message);
     }
   };
 
 
-  
+
   const addToCart = async (itemId) => {
     let cartData = structuredClone(cartItems);
     if (cartData[itemId]) {
@@ -63,6 +74,7 @@ export const AppContextProvider = (props) => {
       cartData[itemId] = 1;
     }
     setCartItems(cartData);
+    toast.success("Item added to cart");
   };
 
   const updateCartQuantity = async (itemId, quantity) => {
@@ -109,6 +121,7 @@ export const AppContextProvider = (props) => {
   const value = {
     user,
     getToken,
+    loading,
     currency,
     router,
     isSeller,
