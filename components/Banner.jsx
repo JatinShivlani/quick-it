@@ -1,6 +1,7 @@
 import React from "react";
 import { assets } from "@/assets/assets";
 import Image from "next/image";
+import Link from "next/link";
 
 const Banner = () => {
   return (
@@ -17,10 +18,12 @@ const Banner = () => {
         <p className="max-w-[343px] font-medium text-gray-800/60">
           From immersive sound to precise controls—everything you need to win
         </p>
+        <Link href={'/all-products'}>
         <button className="group flex items-center justify-center gap-1 px-12 py-2.5 bg-orange-600 rounded text-white">
           Buy now
           <Image className="group-hover:translate-x-1 transition" src={assets.arrow_icon_white} alt="arrow_icon_white" />
         </button>
+        </Link>
       </div>
       <Image
         className="hidden md:block max-w-80"

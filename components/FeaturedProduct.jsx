@@ -1,6 +1,7 @@
 import React from "react";
 import { assets } from "@/assets/assets";
 import Image from "next/image";
+import Link from "next/link";
 
 const products = [
   {
@@ -44,9 +45,11 @@ const FeaturedProduct = () => {
               <p className="text-sm lg:text-base leading-5 max-w-60">
                 {description}
               </p>
+              <Link href={'/all-products'}>
               <button className="flex items-center gap-1.5 bg-orange-600 px-4 py-2 rounded">
                 Buy now <Image className="h-3 w-3" src={assets.redirect_icon} alt="Redirect Icon" />
               </button>
+              </Link>
             </div>
           </div>
         ))}
