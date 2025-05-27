@@ -5,22 +5,41 @@ import Image from "next/image";
 import { useAppContext } from "@/context/AppContext";
 import Footer from "@/components/seller/Footer";
 import Loading from "@/components/Loading";
+import axios from "axios";
+import toast from "react-hot-toast";
 
 const Orders = () => {
 
-    const { currency } = useAppContext();
+    const { currency, getToken, user } = useAppContext();
 
     const [orders, setOrders] = useState([]);
     const [loading, setLoading] = useState(true);
 
     const fetchSellerOrders = async () => {
-        setOrders(orderDummyData);
-        setLoading(false);
+        try {
+            const token = await getToken();
+            const { data } = await axios.get('/api/order/seller-orders', {
+                headers: {
+                    Authorization: `Bearer ${token}`,
+                },
+            });
+            if (data.success) {
+                setOrders(data.enrichedOrders);
+                setLoading(false);
+            } else {
+                toast.error("Failed to fetch orders:", data.message);
+            }
+        } catch (error) {
+            console.error("Error fetching orders:", error);
+            toast.error("Failed to fetch orders. Please try again later.");
+        }
     }
 
     useEffect(() => {
-        fetchSellerOrders();
-    }, []);
+if(user){
+    fetchSellerOrders()
+}
+    }, [user]);
 
     return (
         <div className="flex-1 h-screen overflow-scroll flex flex-col justify-between text-sm">
